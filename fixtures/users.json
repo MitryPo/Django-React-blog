@@ -1,0 +1,26 @@
+[
+    {
+        "username": "Димчик",
+        "password": "qwerty1234",
+        "phone":"9294128320",
+        "balance":1000
+    },
+    {
+        "username": "Ванек",
+        "password": "qwerty1234",
+        "phone":"9878362505",
+        "balance":500
+    },
+    {
+        "username": "Славик",
+        "password": "qwerty1234",
+        "phone":"9888363555",
+        "balance":300
+    },
+    {
+        "username": "Макс",
+        "password": "qwerty1234",
+        "phone":"9274128319",
+        "balance":100
+    }
+]

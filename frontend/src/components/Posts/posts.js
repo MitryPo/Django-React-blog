@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react'
+import React, { useState, useEffect } from 'react'
 import {
 	makeStyles, Card, CardContent, CardMedia, Grid, Typography,
 	Container, Link, GridList, GridListTile
@@ -14,6 +14,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 	cardMedia: {
 		paddingTop: '55%',
+		margin: theme.spacing(0,2,0,0)
 	},
 	link: {
 		margin: theme.spacing(1, 1.5)
@@ -55,52 +56,61 @@ export default function Posts(props) {
 	};
 	const { posts } = props
 	const classes = useStyles()
-	if (!posts || posts.length === 0) return <p className={classes.noPosts}>Публикаций нет</p>
+	if (!posts || posts.length === 0)
+		return (
+			<Typography
+				className={classes.noPosts}
+			>Публикаций нет. 
+			<Link href='/create'
+			> Cоздать публикацию
+	</Link>
+			</Typography>
+		)
 	return (
 		<React.Fragment>
 			<Container>
 				<GridList>
 					{posts.map((post, index) => (
-							<GridListTile
-								key={index}
-								cols={index % 3 === 0 ? 2 : 1}
-								rows='auto'
-							>
-								<Card className={classes.card} elevation={0}>
-									<Link
-										color='textPrimary'
-										href={`/post/${post.slug}`}
-										className={classes.link}
+						<GridListTile
+							key={index}
+							cols={index % 3 === 0 ? 2 : 1}
+							rows='auto'
+						>
+							<Card className={classes.card} elevation={0}>
+								<Link
+									color='textPrimary'
+									href={`/post/${post.slug}`}
+									className={classes.link}
+								>
+									<CardMedia
+										className={classes.cardMedia}
+										image='https://source.unsplash.com/random'
+										title='Image title'
+									/>
+								</Link>
+								<CardContent className={classes.cardContent}>
+									<Typography
+										gutterBottom
+										variant='h6'
+										className={classes.postTitle}
 									>
-										<CardMedia
-											className={classes.cardMedia}
-											image='https://source.unsplash.com/random'
-											title='Image title'
-										/>
-									</Link>
-									<CardContent className={classes.cardContent}>
-										<Typography
-											gutterBottom
-											variant='h6'
-											className={classes.postTitle}
-										>
-											{post.title.substr(0, 45)}
-										</Typography>
+										{post.title.substr(0, 45)}
+									</Typography>
 
-										<Typography variant="body2" className={classes.postText}>
-											{index % 3 === 0 ?
-												`${post.excerpt.substr(0, 100).trim()}...`
-												:
-												`${post.excerpt.substr(0, 50).trim()}...`
-											}
-										</Typography>
-										<Typography variant="caption" color="textSecondary">
+									<Typography variant="body2" className={classes.postText}>
+										{index % 3 === 0 ?
+											`${post.excerpt.substr(0, 100).trim()}...`
+											:
+											`${post.excerpt.substr(0, 50).trim()}...`
+										}
+									</Typography>
+									<Typography variant="caption" color="textSecondary">
 										{post.category} &bull; {` ${new Date(post.published).toLocaleDateString("ru-RU", options)}`}
-										</Typography>
-									</CardContent>
-								</Card>
-							</GridListTile>
-						)
+									</Typography>
+								</CardContent>
+							</Card>
+						</GridListTile>
+					)
 					)}
 				</GridList>
 			</Container>

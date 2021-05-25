@@ -23,3 +23,16 @@ class UserRegisterSerialzer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         return User.objects.create_user(**validated_data)
+
+
+class UserUpdateSerialzer(serializers.ModelSerializer):
+    
+    user_name = serializers.CharField(max_length=50)
+    email = serializers.EmailField()
+
+    class Meta:
+        model = User
+        fields = [
+            'user_name',
+            'email',
+        ]   

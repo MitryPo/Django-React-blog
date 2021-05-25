@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React from 'react'
 import {
 	makeStyles, Paper, IconButton, Checkbox, Table, TableBody, TablePagination, TableHead,
 	TableCell, TableContainer, TableRow, Container, Badge, Link, Typography,
@@ -14,7 +14,7 @@ const useStyles = makeStyles((theme) => ({
 		color: theme.palette.primary.main,
 	},
 	containter: {
-		paddingTop: theme.spacing(5)
+		paddingTop: theme.spacing(12)
 	},
 	cardMedia: {
 		paddingTop: '56.25%', // 16:9
@@ -66,12 +66,12 @@ export default function Posts(props) {
 
 
 	if (!posts || posts.length === 0) return (
-		<p className={classes.noPosts}
+		<Typography className={classes.noPosts}
 		>Публикаций нет.
 			<Link href='/create'
-			>Cоздать публикацию
+			> Cоздать публикацию
 	</Link>
-		</p>
+		</Typography>
 	)
 
 	return (

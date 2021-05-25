@@ -12,27 +12,28 @@ const useStyles = makeStyles((theme) => ({
 
 	paper: {
 		marginTop: theme.spacing(8),
-		display: 'flex',
-		flexDirection: 'column',
-	},
-	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main,
 	},
 	form: {
-		width: '100%', // Fix IE 11 issue.
+		width: '100%',
 		marginTop: theme.spacing(3),
-	},
-	button: {
-		margin: theme.spacing(3, 0, 0)
 	},
 	header: {
 		fontWeight: 700
 	},
-	input: {
-		display: 'none'
+	button: {
+		marginTop: theme.spacing(3)
 	}
 }));
+
+export const options = [
+	{
+		value: 'draft',
+		label: 'Черновик',
+	},
+	{
+		value: 'published',
+		label: 'Публикация'
+	}]
 
 export default function PostCreate() {
 
@@ -47,15 +48,6 @@ export default function PostCreate() {
 		status: 'draft'
 	});
 
-	const options = [
-		{
-			value: 'draft',
-			label: 'Черновик',
-		},
-		{
-			value: 'published',
-			label: 'Публикация'
-		}]
 
 	const [postData, updatePostData] = useState(initialFormData);
 	const [postImage, setPostImage] = useState(undefined);
@@ -100,7 +92,7 @@ export default function PostCreate() {
 			.catch((err) => {
 				alert(err)
 			})
-			console.log(formData)
+		console.log(formData)
 		history.push('/admin')
 		window.location.reload()
 	}
@@ -149,6 +141,7 @@ export default function PostCreate() {
 										label="Заголовок"
 										name="title"
 										autoComplete="title"
+										helperText='Заголовок'
 										onChange={handleChange}
 									/>
 								</Grid>
@@ -161,6 +154,7 @@ export default function PostCreate() {
 										size='small'
 										label="О чем публикация"
 										name="excerpt"
+										helperText='Краткое собержание'
 										autoComplete="excerpt"
 										onChange={handleChange}
 
@@ -176,6 +170,7 @@ export default function PostCreate() {
 										label="Содержание"
 										name="content"
 										autoComplete="content"
+										helperText='Основная информация'
 										multiline
 										rows={4}
 										onChange={handleChange}
@@ -190,26 +185,29 @@ export default function PostCreate() {
 										onChange={handleChange}
 									/>
 								</Grid>
-								<TextField
-									variant="outlined"
-									required
-									fullWidth
-									id="status"
-									size='small'
-									label="Статус"
-									name="status"
-									value={postData.status}
-									select
-									helperText='Выберите статус для вашей публикации'
-									onChange={handleChange}
-								>
-									{options.map((status, index) => (
-										<MenuItem key={index} value={status.value}
-										>{status.label}
-										</MenuItem>
-									))}
-								</TextField>
+								<Grid item xs={12}>
+									<TextField
+										variant="outlined"
+										required
+										fullWidth
+										id="status"
+										size='small'
+										label="Статус"
+										name="status"
+										value={postData.status}
+										select
+										helperText='Выберите статус для вашей публикации'
+										onChange={handleChange}
+									>
+										{options.map((status, index) => (
+											<MenuItem key={index} value={status.value}
+											>{status.label}
+											</MenuItem>
+										))}
+									</TextField>
+								</Grid>
 							</Grid>
+							<Grid item xs={12}>
 							<Button
 								type="submit"
 								variant="contained"
@@ -217,9 +215,11 @@ export default function PostCreate() {
 								className={classes.button}
 								onClick={handleSubmit}
 								disableElevation
+								size='small'
 							>
 								{submit.text}
 							</Button>
+							</Grid>
 						</form>
 					</div>
 					:

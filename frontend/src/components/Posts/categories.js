@@ -8,7 +8,7 @@ export default function Categories() {
 
   useEffect(() => {
     axiosInstance
-      .get('categories/')
+      .get('posts/categories/')
       .then((res) => {
         setCategories(res.data)
       })

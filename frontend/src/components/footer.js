@@ -66,17 +66,13 @@ function Footer() {
 							<Typography variant='h6' color='textPrimary' gutterBottom>
 								{footer.title}
 							</Typography>
-							<ul>
-								{footer.description.map((item) => (
-									<li key={item}>
-										<Typography variant='subtitle1'>
-											<Link href='#' color='textSecondary'>
-												{item}
-											</Link>
-										</Typography>
-									</li>
-								))}
-							</ul>
+							{footer.description.map((item) => (
+								<Typography key={item} variant='subtitle1'>
+									<Link href='#' color='textSecondary'>
+										{item}
+									</Link>
+								</Typography>
+							))}
 						</Grid>
 					))}
 				</Grid>

@@ -12,8 +12,9 @@ import FilterPosts from './components/Posts/filrterPosts'
 import Search from './components/searchPosts'
 import PostCreate from './components/Admin/postCreate'
 import PostEdit from './components/Admin/postEdit'
+import Profile from './components/Admin/profile'
 import Admin from './components/Admin/admin'
-import { blue, blueGrey, red, green } from '@material-ui/core/colors';
+import { blue, grey, red } from '@material-ui/core/colors';
 
 
 
@@ -21,7 +22,7 @@ const theme = createMuiTheme({
 
   palette: {
     primary: {
-      main: blueGrey[700],
+      main: grey[700],
     },
     secondary: {
       main: red['A700'],
@@ -41,6 +42,7 @@ const routing = (
           <Route path='/login/' component={Login} />
           <Route path='/logout/' component={LogOut} />
           <Route path='/admin/' component={Admin} />
+          <Route path='/profile/' component={Profile} />
           <Route path='/create/' component={PostCreate} />
           <Route path='/edit/:slug/' component={PostEdit} />
           <Route path='/post/:slug/' component={PostDetail} />

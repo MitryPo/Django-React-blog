@@ -7,6 +7,7 @@ import {
 	makeStyles, Container, Select, Typography,
 	Grid, Button, MenuItem, CssBaseline, TextField
 } from '@material-ui/core/';
+import { options } from './postCreate'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
 		margin: theme.spacing(3, 0, 2),
 	},
 	header: {
-        fontWeight: 700
-    }
+		fontWeight: 700
+	}
 }));
 
 export default function PostEdit() {
@@ -35,6 +36,7 @@ export default function PostEdit() {
 		title: '',
 		excerpt: '',
 		content: '',
+		status: null
 	});
 
 	const token = localStorage.getItem('access_token')
@@ -46,16 +48,17 @@ export default function PostEdit() {
 
 	useEffect(() => {
 		axiosInstance.get(`posts/detail/${slug}/`)
-		.then((res) => {
-			updateFormData({
-				...formData,
-				['category']: res.data.category,
-				['title']: res.data.title,
-				['excerpt']: res.data.excerpt,
-				['content']: res.data.content,
+			.then((res) => {
+				updateFormData({
+					...formData,
+					['category']: res.data.category,
+					['title']: res.data.title,
+					['excerpt']: res.data.excerpt,
+					['content']: res.data.content,
+					['status']: res.data.status
+				})
+				console.log(res.data)
 			})
-			console.log(res.data)
-		})
 	}, [updateFormData, slug])
 
 	const handleChange = (e) => {
@@ -72,7 +75,8 @@ export default function PostEdit() {
 				title: formData.title.trim(),
 				excerpt: formData.excerpt.trim(),
 				content: formData.content.trim(),
-				category: formData.category
+				category: formData.category,
+				status: formData.status
 			})
 			.then((res) => {
 				history.push('/admin')
@@ -126,6 +130,7 @@ export default function PostEdit() {
 										size='small'
 										name="title"
 										autoComplete="title"
+                    					helperText='Заголовок'
 										onChange={handleChange}
 									/>
 								</Grid>
@@ -138,6 +143,7 @@ export default function PostEdit() {
 										id="excerpt"
 										size='small'
 										name="excerpt"
+                    					helperText='Краткое описание'
 										autoComplete="excerpt"
 										onChange={handleChange}
 
@@ -153,10 +159,31 @@ export default function PostEdit() {
 										value={formData.content}
 										name="content"
 										autoComplete="content"
+                    					helperText='Основная информация'
 										multiline
 										rows={4}
 										onChange={handleChange}
 									/>
+								</Grid>
+								<Grid item xs={12}>
+									<TextField
+										variant="outlined"
+										required
+										fullWidth
+										id="status"
+										size='small'
+										name="status"
+										value={formData.status}
+										select
+										helperText='Выберите статус для вашей публикации'
+										onChange={handleChange}
+									>
+										{options.map((status, index) => (
+											<MenuItem key={index} value={status.value}
+											>{status.label}
+											</MenuItem>
+										))}
+									</TextField>
 								</Grid>
 							</Grid>
 							<Button

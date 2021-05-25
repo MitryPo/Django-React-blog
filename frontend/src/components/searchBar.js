@@ -6,7 +6,7 @@ import SearchIcon from '@material-ui/icons/Search';
 
 const useStyles = makeStyles((theme) => ({
 	searchIcon: {
-		padding: theme.spacing(0, 2),
+		padding: theme.spacing(2, 2),
 		height: '100%',
 		position: 'relative',
 		pointerEvents: 'none',
@@ -14,6 +14,9 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: 'center',
 		justifyContent: 'center',
 	},
+	search: {
+		display: 'flex',
+	}
 }))
 
 
@@ -39,17 +42,11 @@ export default function SearchBar() {
 				id="standard-search"
 				label="Поиск публикаций"
 				type="search"
-				InputProps={{
-					endAdornment: (
-					  <InputAdornment position="end">
-						
-					  </InputAdornment>
-					),
-				  }}
+				fullWidth
 			>
 			</TextField>
-			<IconButton onClick={Search}>
-				<SearchIcon />
+			<IconButton size='small' onClick={Search}>
+				<SearchIcon className={classes.searchIcon}/>
 			</IconButton>
 		</div>
 	)

@@ -6,7 +6,7 @@ import Header from '../../components/header'
 import Footer from '../../components/footer'
 import { Link, makeStyles, Grid, Container, Typography } from '@material-ui/core'
 import { useParams } from 'react-router'
-import Categories from './categories'
+import {SideBar} from './sideBar'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -24,7 +24,6 @@ export default function FilterPosts() {
   const classes = useStyles()
   const {slug} = useParams()
   const PostLoading = PostLoadingComponent(Posts)
-  const categories = Categories()
   const [appState, setAppState] = useState({
     loading: true,
     posts: null
@@ -32,7 +31,7 @@ export default function FilterPosts() {
 
   useEffect(() => {
     axiosInstance
-    .get(`api/posts/?category__slug=${slug}`)
+    .get(`/posts/?category__slug=${slug}`)
       .then((res) => {
         setAppState({
           posts: res.data,
@@ -56,23 +55,7 @@ export default function FilterPosts() {
             <PostLoading isLoading={appState.loading} posts={appState.posts} />
           </Grid>
           <Grid item xs={12} md={2}>
-            <Typography
-              variant='h5'
-              className={classes.header}
-              gutterBottom
-            >
-              Категории
-            </Typography>
-            {categories.map((category, index) => (
-              <Typography
-                variant='body1'
-                gutterBottom
-              >
-                <Link key={index} href={`/category/${category.slug}`}
-                >{category.name}
-                </Link>
-              </Typography>
-            ))}
+            <SideBar/>
           </Grid>
         </Grid>
         <Footer />

@@ -1,26 +1,22 @@
 [
     {
-        "username": "Димчик",
+        "user_name": "Димчик",
         "password": "qwerty1234",
-        "phone":"9294128320",
-        "balance":1000
+        "email":"dim@mail.ru"
     },
     {
-        "username": "Ванек",
+        "user_name": "Ванек",
         "password": "qwerty1234",
-        "phone":"9878362505",
-        "balance":500
+        "email":"van@mail.ru"
     },
     {
-        "username": "Славик",
+        "user_name": "Славик",
         "password": "qwerty1234",
-        "phone":"9888363555",
-        "balance":300
+        "email":"sla@mail.ru"
     },
     {
-        "username": "Макс",
+        "user_name": "Макс",
         "password": "qwerty1234",
-        "phone":"9274128319",
-        "balance":100
+        "email":"max@mail.ru"
     }
 ]

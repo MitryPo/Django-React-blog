@@ -1,31 +1,90 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import { useHistory, useParams } from 'react-router-dom'
+import clsx from 'clsx';
 import {
-  AppBar, Grid, Container, Divider, Link, IconButton, Toolbar, Menu, Tab, Tabs, MenuItem, Avatar, Button, Typography
+  AppBar, Grid, Link, Toolbar, Divider, List, useTheme,
+  ListItem, ListItemIcon, ListItemText, Drawer,
+  IconButton, Typography
 } from '@material-ui/core'
 import Categories from './Posts/categories'
-import SearchBar from '../components/searchBar'
-import AddCircleIcon from '@material-ui/icons/AddCircle';
+import AddIcon from '@material-ui/icons/Add';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
+import SettingsIcon from '@material-ui/icons/Settings';
+import MessageOutlinedIcon from '@material-ui/icons/MessageOutlined';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import InputIcon from '@material-ui/icons/Input';
+import MenuIcon from '@material-ui/icons/Menu';
 
 
+const drawerWidth = '100%';
 const useStyles = makeStyles((theme) => ({
-
+  root: {
+    display: 'flex',
+  },
   appBar: {
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    marginLeft: drawerWidth,
+    transition: theme.transitions.create(['margin', 'width'], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+  },
+  menuButton: {
+    marginRight: theme.spacing(2),
+  },
+  hide: {
+    display: 'none',
+  },
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
+  },
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 1),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-end',
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginLeft: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create('margin', {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  },
+  appBar: {
+    padding: 0,
     borderBottom: `1px solid ${theme.palette.divider}`,
-  },
-  container: {
-    paddingTop: theme.spacing(13)
-  },
-  avatar: {
-    height: theme.spacing(4),
-    width: theme.spacing(4)
+    display: 'flex'
   },
   mainLink: {
-    textDecoration: 'underline'
+    textDecoration: 'underline',
+  },
+  link: {
+    textAlign: 'center'
   },
   toolbarTitle: {
-    paddingBottom: theme.spacing(5),
     flexGrow: 1,
     fontWeight: 700
   },
@@ -35,21 +94,17 @@ const useStyles = makeStyles((theme) => ({
 function Header() {
   const token = localStorage.getItem('access_token')
   const classes = useStyles()
-  const { slug } = useParams()
   const categories = Categories()
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [value, setValue] = useState(0);
+  const [open, setOpen] = React.useState(false);
 
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  }
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget)
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-
+  const handleDrawerClose = () => {
+    setOpen(false);
+  }
+  const theme = useTheme();
   return (
     <React.Fragment>
       <AppBar
@@ -61,93 +116,88 @@ function Header() {
           <Grid
             container
             direction='row'
-            spacing={2}
+            spacing={1}
             alignItems='center'
-            justify='space-around'
+            justify='space-between'
           >
             <Grid item>
-              <Typography variant='overline' className={classes.mainLink}>
-                <Link color='textPrimary' href='/'>Главная</Link>
+              <Typography
+                variant='h4'
+                color='inherit'
+                className={classes.toolbarTitle}
+              ><Link color='textPrimary' href='/'>
+                  BlogmeUp</Link>
               </Typography>
             </Grid>
-            {categories.map((category) => (
-              <Grid item>
-                <Typography variant='overline'>
-                  <Link
-                    color='textPrimary'
-                    href={`/category/${category.slug}`}
-                    key={category.id}
-                  >{category.name}
-                  </Link>
-                </Typography>
-              </Grid>
-            ))}
             <Grid item>
               <IconButton
-                href='/create'
-                color='primary'
+                color="inherit"
+                aria-label="open drawer"
+                onClick={handleDrawerOpen}
+                edge="start"
+                className={clsx(classes.menuButton, open && classes.hide)}
               >
-                <AddCircleIcon fontSize='large' />
+                <MenuIcon />
               </IconButton>
             </Grid>
-            {
-              token !== null ?
-                <Grid item>
-                  <IconButton>
-                    <Avatar
-                      onClick={handleClick}
-                      className={classes.avatar}
-                    >
-                    </Avatar>
-                    <Menu
-                      id="simple-menu"
-                      anchorEl={anchorEl}
-                      keepMounted
-                      open={Boolean(anchorEl)}
-                      onClose={handleClose}
-                    >
-                      <MenuItem onClick={() => window.location.assign('/profile/') }>Профиль</MenuItem>
-                      <MenuItem onClick={() => window.location.assign('/admin/')}>Мои публикации</MenuItem>
-                      <MenuItem color='secondary' onClick={() => window.location.replace('/logout/')}>Выйти</MenuItem>
-                    </Menu>
-                  </IconButton>
-                </Grid>
-                :
-                <Button
-                  className={classes.logIn}
-                  href='/login'
-                  variant='contained'
-                  size='small'
-                  disableElevation
-                >Войти
-							</Button>
-            }
+
           </Grid>
         </Toolbar>
-
       </AppBar >
-      <Container className={classes.container}>
-        <Grid
-          container
-          direction="row"
-          justify='flex-start'
-          alignItems='flex-start'
-        >
-          <Grid item xs={12} md={3}>
-            <Typography
-              variant='h3'
-              color='inherit'
-              className={classes.toolbarTitle}
-            >
-              BlogmeUp
-              </Typography>
-          </Grid>
-          <Grid xs={12} md={7}>
-            <SearchBar />
-          </Grid>
-        </Grid>
-        <Divider />
-      </Container>
+      <Drawer
+        className={classes.drawer}
+        variant="persistent"
+        anchor="left"
+        open={open}
+        classes={{
+          paper: classes.drawerPaper,
+        }}
+      >
+        <div className={classes.drawerHeader}>
+          <IconButton onClick={handleDrawerClose}>
+            {theme.direction === 'ltr' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
+          </IconButton>
+        </div>
+        <List>
+          <Divider />
+          {categories.map((category, index) => (
+            <ListItem
+              button
+              key={index}
+              onClick={() => window.location.assign(`/category/${category.slug}`)}>
+              <ListItemIcon></ListItemIcon>
+              <ListItemText primary={category.name} />
+            </ListItem>
+          ))}
+          <Divider />
+          {
+            token !== null ?
+              <div>
+                <ListItem button onClick={() => window.location.assign('/create')}>
+                  <ListItemIcon><AddIcon /></ListItemIcon>
+                  <ListItemText primary='Создать публикацию' />
+                </ListItem>
+                <ListItem button onClick={() => window.location.assign('/profile')}>
+                  <ListItemIcon><SettingsIcon color='primary' /></ListItemIcon>
+                  <ListItemText primary='Профиль' />
+                </ListItem>
+                <ListItem button onClick={() => window.location.assign('/admin/')}>
+                  <ListItemIcon><MessageOutlinedIcon color='primary' /></ListItemIcon>
+                  <ListItemText primary='Мои публикации' />
+                </ListItem>
+                <ListItem button onClick={() => window.location.assign('/logout')}>
+                  <ListItemIcon><ExitToAppIcon color='primary' /></ListItemIcon>
+                  <ListItemText primary='Выйти' />
+                </ListItem>
+              </div>
+              :
+              <ListItem button onClick={() => window.location.assign('/login')}>
+                <ListItemIcon><InputIcon color='primary' /></ListItemIcon>
+                <ListItemText primary='Войти' />
+              </ListItem>
+          }
+        </List>
+      </Drawer>
     </React.Fragment >
   )
 }

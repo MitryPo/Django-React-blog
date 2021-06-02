@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
-import axios from 'axios'
-import { useHistory } from 'react-router-dom'
+import {axiosInstance} from '../../axios'
 
 import {
   Avatar, Button, CssBaseline, TextField,
@@ -62,8 +61,8 @@ export default function Login() {
     e.preventDefault()
     // console.log(formData)
 
-    axios
-      .post(`http://127.0.0.1:8000/auth/token/login`, {
+    axiosInstance
+      .post(`/auth/token/login`, {
         email: formData.email,
 				password: formData.password
       })
@@ -86,7 +85,6 @@ export default function Login() {
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Avatar className={classes.avatar}>
-
           </Avatar>
           <Typography component="h1" variant="h5">
             Вход
@@ -140,8 +138,7 @@ export default function Login() {
                 </Link>
               </Grid>
             </Grid>
-            <Box mt={5} className={classes.box}>
-              
+            <Box mt={5} className={classes.box}> 
             </Box>
           </form>
         </div>

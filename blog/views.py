@@ -34,6 +34,7 @@ class MyPostList(generics.ListAPIView):
     permission_classes = [PostUserWritePermission,]
     filter_backends = [DjangoFilterBackend,]
     filterset_fields = ['category__slug', 'status']
+    pagination_class = None
 
     def get_queryset(self):
         return Post.objects.filter(author=self.request.user.id)
@@ -51,7 +52,7 @@ class PostDetail(generics.RetrieveAPIView):
     queryset = Post.objects.all()
 
 
-class PostAdminDetail(generics.RetrieveUpdateDestroyAPIView):
+class PostEdit(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [PostUserWritePermission,]
     serializer_class = PostCreateSerialzer
     lookup_field='slug'
@@ -62,3 +63,4 @@ class CategoryView(generics.ListAPIView):
     permission_classes = [permissions.AllowAny,]
     queryset = Category.objects.all()
     serializer_class = CategorySerialzer
+    pagination_class=None

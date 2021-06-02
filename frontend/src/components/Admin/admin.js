@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react'
-import axiosInstance from './axios';
+import {axiosInstance} from '../../axios';
 import PostLoadingComponent from '../Posts/postLoading'
 import Posts from './posts'
 import Header from '../header'
-import Footer from '../footer'
 
 
 export default function Admin() {
@@ -29,7 +28,6 @@ export default function Admin() {
 		<div>
 			<Header />
 			<PostLoading isLoading={appState.loading} posts={appState.posts} />
-			<Footer />
 		</div>
 	)
 }

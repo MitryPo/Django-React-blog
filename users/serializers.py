@@ -35,4 +35,5 @@ class UserUpdateSerialzer(serializers.ModelSerializer):
         fields = [
             'user_name',
             'email',
+            'avatar'
         ]   

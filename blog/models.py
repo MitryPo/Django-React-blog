@@ -34,7 +34,7 @@ class Post(models.Model):
 
     category = models.ForeignKey(
         Category, on_delete=models.PROTECT, default=None)
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=250)
     image = models.ImageField(upload_to='posts', null=True, blank=True)
     excerpt = models.TextField(null=True)
     content = models.TextField()

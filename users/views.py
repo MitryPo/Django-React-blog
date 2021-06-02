@@ -27,6 +27,7 @@ class UserAccount(generics.GenericAPIView):
 
     serializer_class = UserUpdateSerialzer
     permission_classes = [permissions.IsAuthenticated,]
+    pagination_class = None
 
     def get(self, request):
         user = User.objects.get(pk=self.request.user.id)

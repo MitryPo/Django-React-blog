@@ -5,7 +5,7 @@ import {
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
-import axiosInstance from './axios';
+import {axiosInstance} from '../../axios';
 
 
 
@@ -76,7 +76,7 @@ export default function Posts(props) {
 
 	return (
 		<React.Fragment>
-			<Container maxWidth='md' className={classes.containter}>
+			<Container className={classes.containter}>
 				<Paper elevation={0}>
 					<TableContainer className={classes.container}>
 						<Table stickyHeader aria-label="sticky table">
@@ -109,7 +109,6 @@ export default function Posts(props) {
 													color={post.status == 'draft' ? 'secondary' : 'primary'}
 												/>
 											</TableCell>
-
 											<TableCell align="left">
 												<IconButton
 													href={`/edit/${post.slug}/`}

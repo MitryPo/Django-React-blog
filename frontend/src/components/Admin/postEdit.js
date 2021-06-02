@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import axiosInstance from './axios';
+import {axiosInstance} from '../../axios';
 import { useParams } from 'react-router-dom'
 import { useHistory } from 'react-router-dom';
 import Categories from '../Posts/categories'
@@ -8,24 +8,22 @@ import {
 	Grid, Button, MenuItem, CssBaseline, TextField
 } from '@material-ui/core/';
 import { options } from './postCreate'
+import Header from '../header'
 
 
 const useStyles = makeStyles((theme) => ({
 
 	paper: {
-		marginTop: theme.spacing(8),
+		width: '100%',
+		marginTop: theme.spacing(13),
 		display: 'flex',
 		flexDirection: 'column',
 	},
 	form: {
-		width: '100%', // Fix IE 11 issue.
 		marginTop: theme.spacing(3),
 	},
-	button: {
-		margin: theme.spacing(3, 0, 2),
-	},
 	header: {
-		fontWeight: 700
+		fontWeight: 500
 	}
 }));
 
@@ -43,11 +41,12 @@ export default function PostEdit() {
 	const categories = Categories()
 	const history = useHistory()
 	const { slug } = useParams()
+	const [postImage, setPostImage] = useState(undefined);
 	const [formData, updateFormData] = useState(initialFormData);
 
 
 	useEffect(() => {
-		axiosInstance.get(`posts/detail/${slug}/`)
+		axiosInstance.get(`posts/edit/${slug}/`)
 			.then((res) => {
 				updateFormData({
 					...formData,
@@ -62,6 +61,11 @@ export default function PostEdit() {
 	}, [updateFormData, slug])
 
 	const handleChange = (e) => {
+		if ([e.target.name] == 'image') {
+			setPostImage({
+				image: e.target.files[0]
+			})
+		}
 		updateFormData({
 			...formData,
 			[e.target.name]: e.target.value
@@ -76,9 +80,10 @@ export default function PostEdit() {
 				excerpt: formData.excerpt.trim(),
 				content: formData.content.trim(),
 				category: formData.category,
+				image: postImage.image,
 				status: formData.status
 			})
-			.then((res) => {
+			.then(() => {
 				history.push('/admin')
 			})
 			.catch((err) => {
@@ -89,120 +94,151 @@ export default function PostEdit() {
 	const classes = useStyles();
 
 	return (
-		<Container component="main" maxWidth="md">
-			{
-				token !== null ?
-
-					<div className={classes.paper}>
-						<Typography variant="h4" className={classes.header}>
-							Редактировать публикацию
+		<div>
+			<Header />
+			<Container component="main" maxWidth="md">
+				{
+					token !== null ?
+						<div className={classes.paper}>
+							<Typography variant="h4" className={classes.header}>
+								Редактировать публикацию
 						</Typography>
-						<form className={classes.form}>
-							<Grid container spacing={2}>
-								<Grid item xs={12}>
-									<TextField
-										select
-										required
-										fullWidth
-										variant="outlined"
-										id="category"
-										size='small'
-										label="Категория"
-										name="category"
-										value={formData.category}
-										helperText='Выберите категорию'
-										onChange={handleChange}
-									>
-										{categories.map((category) => (
-											<MenuItem key={category.name} value={category.id}
-											>{category.name}
-											</MenuItem>
-										))}
-									</TextField>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										variant="outlined"
-										required
-										fullWidth
-										value={formData.title}
-										id="title"
-										size='small'
-										name="title"
-										autoComplete="title"
-                    					helperText='Заголовок'
-										onChange={handleChange}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										required
-										fullWidth
-										value={formData.excerpt}
-										variant="outlined"
-										id="excerpt"
-										size='small'
-										name="excerpt"
-                    					helperText='Краткое описание'
-										autoComplete="excerpt"
-										onChange={handleChange}
+							<form className={classes.form} noValidate>
+								<Grid
+									container
+									direction='row'
+									alignItems='flex-start'
+									justify='space-between'
+									spacing={5}
+								>
+									<Grid item xs={12} md={8}>
+										<Grid container spacing={2}>
+											<Grid item xs={12}>
+												<TextField
+													variant="outlined"
+													required
+													fullWidth
+													name="title"
+													autoComplete="title"
+													helperText='Заголовок'
+													value={formData.title}
+													onChange={handleChange}
+												/>
+											</Grid>
+											<Grid item xs={12}>
+												<TextField
+													variant="outlined"
+													required
+													fullWidth
+													name="excerpt"
+													helperText='Краткое содержание'
+													autoComplete="excerpt"
+													value={formData.excerpt}
+													onChange={handleChange}
 
-									/>
+												/>
+											</Grid>
+											<Grid item xs={12}>
+												<TextField
+													variant="outlined"
+													required
+													fullWidth
+													name="content"
+													autoComplete="content"
+													helperText='Основная информация'
+													multiline
+													rows={12}
+													value={formData.content}
+													onChange={handleChange}
+												/>
+											</Grid>
+											<Grid item xs={12}>
+												<input
+													accept="image/*"
+													name='image'
+													type="file"
+													
+													label='Обложка публикации'
+													onChange={handleChange}
+												/>
+												<div style={{ padding: '0.2em 0 0 0.8em' }}>
+													<Typography
+														color='primary'
+														variant='caption'
+													>Обложка для публикации
+													</Typography>
+												</div>
+											</Grid>
+										</Grid>
+									</Grid>
+									<Grid item xs={12} md={4}>
+										<Grid
+											container
+											spacing={2}
+											direction='row'
+										>
+											<Grid item xs={12}>
+												<TextField
+													select
+													required
+													fullWidth
+													variant="outlined"
+													id="category"
+													// label="Категория"
+													name="category"
+													value={formData.category}
+													helperText='Выберите категорию'
+													onChange={handleChange}
+												>
+													{categories.map((category) => (
+														<MenuItem key={category.name} value={category.id}
+														>{category.name}
+														</MenuItem>
+													))}
+												</TextField>
+											</Grid>
+											<Grid item xs={12}>
+												<TextField
+													variant="outlined"
+													required
+													fullWidth
+													id="status"
+													name="status"
+													value={formData.status}
+													select
+													helperText='Выберите статус для вашей публикации'
+													onChange={handleChange}
+												>
+													{options.map((status, index) => (
+														<MenuItem key={index} value={status.value}
+														>{status.label}
+														</MenuItem>
+													))}
+												</TextField>
+											</Grid>
+											<Grid item xs={12}>
+												<Button
+													type="submit"
+													variant="contained"
+													color='primary'
+													size='large'
+													onClick={handleSubmit}
+													disableElevation
+													fullWidth
+												>
+													Сохранить изменения
+										</Button>
+											</Grid>
+										</Grid>
+									</Grid>
 								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										variant="outlined"
-										required
-										fullWidth
-										id="content"
-										size='small'
-										value={formData.content}
-										name="content"
-										autoComplete="content"
-                    					helperText='Основная информация'
-										multiline
-										rows={4}
-										onChange={handleChange}
-									/>
-								</Grid>
-								<Grid item xs={12}>
-									<TextField
-										variant="outlined"
-										required
-										fullWidth
-										id="status"
-										size='small'
-										name="status"
-										value={formData.status}
-										select
-										helperText='Выберите статус для вашей публикации'
-										onChange={handleChange}
-									>
-										{options.map((status, index) => (
-											<MenuItem key={index} value={status.value}
-											>{status.label}
-											</MenuItem>
-										))}
-									</TextField>
-								</Grid>
-							</Grid>
-							<Button
-								type="submit"
-								variant="contained"
-								color='primary'
-								size='small'
-								onClick={handleSubmit}
-								className={classes.button}
-								disableElevation
-							>
-								Сохранить изменения
-							</Button>
-						</form>
-					</div>
-					:
-					window.location.href = '/login'
-			}
-		</Container>
+							</form>
+						</div>
+						:
+						window.location.href = '/login'
+				}
+			</Container>
+		</div>
 	);
 }
 

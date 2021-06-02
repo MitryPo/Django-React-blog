@@ -3,7 +3,7 @@ import { axiosInstance } from '../../axios'
 import { useParams } from 'react-router-dom'
 import Header from '../header'
 import Footer from '../footer'
-import UserChip from '../Admin/avatar'
+import UserChip from '../Admin/chip'
 
 import {
 	Divider, makeStyles, Container,
@@ -13,23 +13,28 @@ import Image from 'material-ui-image';
 
 
 const useStyles = makeStyles((theme) => ({
-	sidebar: {
-		padding: theme.spacing(2),
-		backgroundColor: theme.palette.grey[300],
+	root: {
+		height: '100vh',
 	},
 	paper: {
-		marginTop: theme.spacing(12),
+		margin: theme.spacing(13, 2),
 		display: 'flex',
 		flexDirection: 'column',
 	},
 	header: {
-		fontWeight: 700
+		fontWeight: 700,
+		fontSize: '3rem'
 	},
-	postContent: {
-		marginTop: theme.spacing(4)
+	image: {
+		margin: theme.spacing(4, 0)
 	},
-	userdata: {
-		margin: theme.spacing(1, 0, 2, 0)
+	content: {
+		whiteSpace: 'pre-wrap',
+		fontSize: '1.2rem'
+	},
+	excerpt: {
+		margin: theme.spacing(1, 0),
+		fontSize: '1.2rem'
 	}
 }))
 
@@ -44,94 +49,80 @@ export default function PostDetail() {
 	const classes = useStyles()
 	const [data, setData] = useState({ posts: [] })
 	useEffect(() => {
-		axiosInstance.get(`posts/detail/${slug}/`).then((res) => {
+		axiosInstance.get(`/posts/detail/${slug}/`).then((res) => {
 			setData({ posts: res.data })
 			// console.log(res.data)
 		})
 	}, [setData, slug])
 
 	return (
-		<div>
-			<Header />
-			<Container component='main' maxWidth='xl'>
-				<div className={classes.paper}>
-					<Container>
-						<Grid
-							container
-							direction="row"
-							justify="space-between"
-							alignItems="flex-start"
-							spacing={4}
-						>
-							<Grid item xs={12} md={8}>
-								<Typography
-									variant='h4'
-									color='textPrimary'
-									className={classes.header}
-								>
-									{data.posts.title}
-								</Typography>
-								<Divider />
-								<Grid
-									className={classes.userdata}
-									container
-									direction='row'
-									justify='flex-start'
-									alignItems='center'
-								>
-									<Grid item>
-										<UserChip
-											author={data.posts.author}
-										>
-										</UserChip>
-									</Grid>
-									<Grid item>
-										<Typography
-											variant='caption'
-											color='textSecondary'
-										>
-											{` ${new Date(data.posts.published).toLocaleDateString("ru-RU", options)}`}
-										</Typography>
-									</Grid>
-								</Grid>
-								<Image
-									src={data.posts.image}
-									onClick={() => console.log('onClick')}
-									aspectRatio={(16 / 9)}
-									cover={false}
-								/>
-								<Typography
-									variant='body1'
-									paragraph
-									className={classes.postContent}
-								>
-									{data.posts.content}
-								</Typography>
-							</Grid>
-							<Grid item xs={12} md={4}>
-								<Paper
-									elevation={0}
-									className={classes.sidebar}>
-									<Typography
-										variant='h6'
-										gutterBottom
-										className={classes.header}
-									>
-										О чем статья?
-                                </Typography>
-									<Typography
-										variant='body2'
-										paragraph
-									>
-										{data.posts.excerpt}
-									</Typography>
-								</Paper>
-							</Grid>
+		<div className={classes.paper}>
+			<Grid
+				container
+				component="main"
+				className={classes.root}
+				justify='center'
+			>
+				<Header />
+				<Grid item xs={12} md={9}>
+					<Typography
+						variant='h3'
+						color='textPrimary'
+						className={classes.header}
+					>
+						{data.posts.title}
+					</Typography>
+					<Divider />
+					<Typography
+						variant='h6'
+						paragraph
+						className={classes.excerpt}
+					>
+						{data.posts.excerpt}
+					</Typography>
+					<Grid
+						className={classes.userdata}
+						container
+						direction='row'
+						justify='flex-start'
+						alignItems='center'
+						spacing={1}
+					>
+						<Grid item>
+							<UserChip
+								author={data.posts.author}
+							>
+							</UserChip>
 						</Grid>
-					</Container>
-				</div>
-			</Container>
-			<Footer />
+						<Grid item>
+							<Typography
+								variant='caption'
+								color='textSecondary'
+							>
+								{data.posts.category} &bull; {` ${new Date(data.posts.published).toLocaleDateString("ru-RU", options)}`}
+							</Typography>
+						</Grid>
+					</Grid>
+				</Grid>
+				<Grid item xs={12} md={9} className={classes.image}>
+					<Image
+						src={data.posts.image}
+						onClick={() => console.log('onClick')}
+						aspectRatio={(16 / 9)}
+						disableSpinner
+					/>
+				</Grid>
+				<Grid item xs={12} md={9}>
+					<Typography
+						className={classes.content}
+						variant='h6'
+						paragraph
+					>
+						{data.posts.content}
+					</Typography>
+				</Grid>
+				<Footer />
+			</Grid>
 		</div>
 	)
 }

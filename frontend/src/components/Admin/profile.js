@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { makeStyles, Snackbar, Avatar, Typography, Grid, Button, Container, TextField } from '@material-ui/core'
+import {
+  makeStyles, Snackbar, Avatar, Typography, Grid,
+  Button, Container, TextField
+} from '@material-ui/core'
 import MuiAlert from '@material-ui/lab/Alert';
-import axiosInstance from './axios';
+import {axiosInstance} from '../../axios';
 import Header from '../header'
-import Footer from '../footer'
-import { useParams } from 'react-router-dom'
 
 
 const useStyles = makeStyles((theme) => ({
-
+  container: {
+    paddingTop: theme.spacing(13)
+  },
   form: {
     width: '100%',
     marginTop: theme.spacing(1),
@@ -34,9 +37,11 @@ export default function Profile() {
   const initialFormData = Object.freeze({
     username: '',
     email: '',
+    avatar: null,
+    errortext: '',
+    error: false
   });
 
-  const { slug } = useParams()
   const classes = useStyles()
   const [snackBar, setSnackBar] = useState({
     open: false,
@@ -50,7 +55,7 @@ export default function Profile() {
   }
 
   useEffect(() => {
-    axiosInstance.get(`user/account/`)
+    axiosInstance.get(`/user/account/`)
       .then((res) => {
         updateFormData({
           ...formData,
@@ -59,19 +64,19 @@ export default function Profile() {
         })
         console.log(res.data)
       })
-  }, [updateFormData, slug])
+  }, [updateFormData])
 
   const handleChange = (e) => {
-    updateFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    })
+      updateFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+      })
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    await axiosInstance
-      .patch(`user/account/`, {
+    axiosInstance
+      .patch(`/user/account/`, {
         user_name: formData.username.trim(),
         email: formData.email.trim(),
       })
@@ -94,7 +99,7 @@ export default function Profile() {
   return (
     <div>
       <Header />
-      <Container maxWidth='xs'>
+      <Container maxWidth='xs' className={classes.container}>
         <Snackbar
           open={snackBar.open}
           autoHideDuration={6000}
@@ -109,7 +114,7 @@ export default function Profile() {
         </Snackbar>
 
         <div className={classes.paper}>
-          <Avatar />
+          <Avatar/>
           <Typography component="h1" variant="h5">
             Личные данные
         </Typography>
@@ -131,13 +136,14 @@ export default function Profile() {
               margin="normal"
               value={formData.email}
               onChange={handleChange}
-              helperText='Email адрес'
+              helperText='Email'
               name="email"
             />
             <Button
               type="submit"
               variant="contained"
               color="primary"
+              size='large'
               fullWidth
               onClick={handleSubmit}
               className={classes.submit}
@@ -148,7 +154,6 @@ export default function Profile() {
           </form>
         </div>
       </Container>
-      <Footer />
     </div>
   )
 }

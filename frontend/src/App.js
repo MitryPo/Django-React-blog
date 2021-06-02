@@ -4,55 +4,67 @@ import Posts from './components/Posts/posts'
 import PostLoadingComponent from './components/Posts/postLoading'
 import Header from './components/header'
 import Footer from './components/footer'
-import { Link, makeStyles, Grid, Container, Typography, Divider } from '@material-ui/core'
-import { useParams } from 'react-router'
-import { SideBar } from './components/Posts/sideBar'
+import { makeStyles, Grid, CssBaseline } from '@material-ui/core'
+import SearchBar from './components/searchBar'
+import Pagination from '@material-ui/lab/Pagination';
 
 
 const useStyles = makeStyles((theme) => ({
-  container: {
-    paddingTop: theme.spacing(5)
+  root: {
+    height: '100vh',
+  },
+  paper: {
+    width: '100%',
+    padding: theme.spacing(5, 2),
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
   },
 }))
 
 
 export default function App() {
   const classes = useStyles()
-  const { slug } = useParams()
   const PostLoading = PostLoadingComponent(Posts)
-  const [appState, setAppState] = useState({loading: true, posts: null})
+  const [appState, setAppState] = useState({ loading: true, posts: null, pages: null })
+  const [page, setPage] = useState('');
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   useEffect(() => {
     axiosInstance
-      .get(`posts/`)
+      .get(`posts/?offset=${(page * 8) - 8}`)
       .then((res) => {
         setAppState({
-          posts: res.data,
-          loading: false
+          posts: res.data.results,
+          loading: false,
+          pages: Math.ceil((res.data.count / 6) - 1)
         })
       })
-  }, [])
+  }, [page])
 
   return (
-    <React.Fragment>
+    <Grid
+      container
+      component="main"
+      justify='center'
+      className={classes.root}
+    >
+      <CssBaseline />
       <Header />
-        <Container className={classes.container}>
-          <Grid
-            container
-            direction="row"
-            justify='flex-start'
-            alignItems="flex-start"
-            spacing={5}
-          >
-            <Grid item xs={12} md={10}>
-              <PostLoading isLoading={appState.loading} posts={appState.posts} />
-            </Grid>
-            <Grid item xs={12} md={2}>
-              <SideBar/>
-            </Grid>
-          </Grid>
-          <Footer />
-        </Container>
-    </React.Fragment >
+      <SearchBar />
+      <Grid item xs={12} md={9} square>
+        <div className={classes.paper}>
+          <PostLoading isLoading={appState.loading} posts={appState.posts} />
+        </div>
+      </Grid>
+      <Grid item xs={12} className={classes.paper}>
+        <Pagination count={appState.pages} page={page} onChange={handleChange} variant="outlined" />
+      </Grid>
+      <Grid item xs={12}>
+        <Footer />
+      </Grid>
+    </Grid >
   )
 }

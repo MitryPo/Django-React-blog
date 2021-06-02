@@ -12,11 +12,11 @@ class PostSerialzer(serializers.ModelSerializer):
 
 
 class PostCreateSerialzer(serializers.ModelSerializer):
-    author = serializers.HiddenField(default=serializers.CurrentUserDefault()
-)
+    author = serializers.HiddenField(default=serializers.CurrentUserDefault())
     class Meta:
         model = Post
         exclude = ['id', 'slug', 'published']
+
 
 class CategorySerialzer(serializers.ModelSerializer):
     class Meta:

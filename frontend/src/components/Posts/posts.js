@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import {
 	makeStyles, Card, CardContent, CardMedia, Grid, Typography,
-	Container, Link, GridList, GridListTile
+	Container, Link
 } from '@material-ui/core'
 
 
@@ -11,10 +11,11 @@ const useStyles = makeStyles((theme) => ({
 		flexWrap: 'wrap',
 		justifyContent: 'space-around',
 		overflow: 'hidden',
+		flexDirection: 'column',
+		alignItems: 'center',
 	},
 	cardMedia: {
 		paddingTop: '55%',
-		margin: theme.spacing(0,2,0,0)
 	},
 	link: {
 		margin: theme.spacing(1, 1.5)
@@ -29,9 +30,9 @@ const useStyles = makeStyles((theme) => ({
 		padding: 0
 	},
 	postTitle: {
-		fontSize: '18px',
-		fontWeight: 600,
+		fontSize: '20px',
 		textAlign: 'left',
+		fontWeight: 700
 	},
 	postText: {
 		display: 'flex',
@@ -39,7 +40,6 @@ const useStyles = makeStyles((theme) => ({
 		alignItems: 'baseline',
 		fontSize: '15px',
 		textAlign: 'left',
-		margnBottom: theme.spacing(2)
 	},
 	noPosts: {
 		textAlign: 'center'
@@ -60,60 +60,58 @@ export default function Posts(props) {
 		return (
 			<Typography
 				className={classes.noPosts}
-			>Публикаций нет. 
-			<Link href='/create'
-			> Cоздать публикацию
-	</Link>
+			>Публикаций нет.
+				<Link href='/create'
+				> Cоздать публикацию
+				</Link>
 			</Typography>
 		)
 	return (
-		<React.Fragment>
-			<Container>
-				<GridList>
-					{posts.map((post, index) => (
-						<GridListTile
-							key={index}
-							cols={index % 3 === 0 ? 2 : 1}
-							rows='auto'
+		<Grid container spacing={3}>
+			{posts.map((post, index) => (
+				<Grid
+					item
+					key={index}
+					md={index % 4 == 0? 12 : 4}
+					sm={12}
+					xs={12}
+				>
+					<Card elevation={0}>
+						<Link
+							color='textPrimary'
+							href={`/post/${post.slug}`}
+							className={classes.link}
 						>
-							<Card className={classes.card} elevation={0}>
-								<Link
-									color='textPrimary'
-									href={`/post/${post.slug}`}
-									className={classes.link}
-								>
-									<CardMedia
-										className={classes.cardMedia}
-										image='https://source.unsplash.com/random'
-										title='Image title'
-									/>
-								</Link>
-								<CardContent className={classes.cardContent}>
-									<Typography
-										gutterBottom
-										variant='h6'
-										className={classes.postTitle}
-									>
-										{post.title.substr(0, 45)}
-									</Typography>
+							<CardMedia
+								className={classes.cardMedia}
+								image={post.image}
+								title='Image title'
+							/>
+						</Link>
+						<CardContent className={classes.cardContent}>
+							<Typography
+								gutterBottom
+								variant='h6'
+								className={classes.postTitle}
+							>
+								{post.title.substr(0, 45)}
+							</Typography>
 
-									<Typography variant="body2" className={classes.postText}>
-										{index % 3 === 0 ?
-											`${post.excerpt.substr(0, 100).trim()}...`
-											:
-											`${post.excerpt.substr(0, 50).trim()}...`
-										}
-									</Typography>
-									<Typography variant="caption" color="textSecondary">
-										{post.category} &bull; {` ${new Date(post.published).toLocaleDateString("ru-RU", options)}`}
-									</Typography>
-								</CardContent>
-							</Card>
-						</GridListTile>
-					)
-					)}
-				</GridList>
-			</Container>
-		</React.Fragment>
+							<Typography variant="body2" className={classes.postText}>
+								{index % 3 === 0 ?
+									`${post.excerpt.substr(0, 100).trim()}...`
+									:
+									`${post.excerpt.substr(0, 50).trim()}...`
+								}
+							</Typography>
+							<Typography variant="caption" color="textSecondary">
+								{post.category} &bull; {` ${new Date(post.published).toLocaleDateString("ru-RU", options)}`}
+							</Typography>
+						</CardContent>
+					</Card>
+				</Grid>
+			)
+			)}
+		</Grid>
 	)
 }

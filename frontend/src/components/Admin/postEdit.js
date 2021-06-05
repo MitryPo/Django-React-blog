@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import {axiosInstance} from '../../axios';
+import {axiosInstance} from './axios';
 import { useParams } from 'react-router-dom'
-import { useHistory } from 'react-router-dom';
 import Categories from '../Posts/categories'
 import {
-	makeStyles, Container, Select, Typography,
-	Grid, Button, MenuItem, CssBaseline, TextField
+	makeStyles, Container, Typography,
+	Grid, Button, MenuItem, TextField
 } from '@material-ui/core/';
 import { options } from './postCreate'
 import Header from '../header'
@@ -34,14 +33,13 @@ export default function PostEdit() {
 		title: '',
 		excerpt: '',
 		content: '',
-		status: null
+		status: null,
 	});
 
 	const token = localStorage.getItem('access_token')
 	const categories = Categories()
-	const history = useHistory()
 	const { slug } = useParams()
-	const [postImage, setPostImage] = useState(undefined);
+	const [postImage, setPostImage] = useState(null);
 	const [formData, updateFormData] = useState(initialFormData);
 
 
@@ -54,15 +52,17 @@ export default function PostEdit() {
 					['title']: res.data.title,
 					['excerpt']: res.data.excerpt,
 					['content']: res.data.content,
+					['image']: res.data.image,
 					['status']: res.data.status
 				})
-				console.log(res.data)
+				// console.log(res.data)
 			})
 	}, [updateFormData, slug])
 
 	const handleChange = (e) => {
 		if ([e.target.name] == 'image') {
 			setPostImage({
+				...postImage,
 				image: e.target.files[0]
 			})
 		}
@@ -84,11 +84,11 @@ export default function PostEdit() {
 				status: formData.status
 			})
 			.then(() => {
-				history.push('/admin')
+				window.location.assign('/my-posts')
 			})
-			.catch((err) => {
-				alert(err)
-			})
+			// .catch((err) => {
+			// 	alert(err)
+			// })
 	};
 
 	const classes = useStyles();
@@ -157,7 +157,6 @@ export default function PostEdit() {
 													accept="image/*"
 													name='image'
 													type="file"
-													
 													label='Обложка публикации'
 													onChange={handleChange}
 												/>

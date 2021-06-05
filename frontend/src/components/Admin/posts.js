@@ -1,11 +1,11 @@
 import React from 'react'
 import {
-	makeStyles, Paper, IconButton, Checkbox, Table, TableBody, TablePagination, TableHead,
+	makeStyles, Paper, IconButton, Table, TableBody, TableHead,
 	TableCell, TableContainer, TableRow, Container, Badge, Link, Typography,
 } from '@material-ui/core'
 import DeleteIcon from '@material-ui/icons/Delete'
 import EditIcon from '@material-ui/icons/Edit'
-import {axiosInstance} from '../../axios';
+import {axiosInstance} from './axios';
 
 
 
@@ -53,10 +53,10 @@ export default function Posts(props) {
 	const { posts } = props
 	const classes = useStyles()
 
-	async function handleDelete(slug) {
-		await axiosInstance.delete(`posts/edit/${slug}`)
-			.then((res) => {
-				console.log(`${res} Delete successful`)
+	function handleDelete(slug) {
+		axiosInstance.delete(`posts/edit/${slug}`)
+			.then(() => {
+				// console.log(`${res} Delete successful`)
 				window.location.reload()
 			})
 			.catch((err) => {

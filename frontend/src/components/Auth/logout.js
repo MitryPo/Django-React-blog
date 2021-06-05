@@ -1,5 +1,5 @@
 import {useEffect} from 'react'
-import {axiosInstance} from '../../axios'
+import {axiosInstance} from '../Admin/axios'
 
 
 export default function LogOut() {

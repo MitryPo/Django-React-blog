@@ -181,7 +181,7 @@ function Header() {
                   <ListItemIcon><SettingsIcon color='primary' /></ListItemIcon>
                   <ListItemText primary='Профиль' />
                 </ListItem>
-                <ListItem button onClick={() => window.location.assign('/admin/')}>
+                <ListItem button onClick={() => window.location.assign('/my-posts')}>
                   <ListItemIcon><MessageOutlinedIcon color='primary' /></ListItemIcon>
                   <ListItemText primary='Мои публикации' />
                 </ListItem>

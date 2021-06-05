@@ -71,7 +71,7 @@ export default function Login() {
         window.location.replace('/')
       })
       .catch((err) => {
-        alert(err)
+        alert(`Неверный логин или пароль`)
       })
   }
 

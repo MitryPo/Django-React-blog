@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import {axiosInstance} from '../../axios';
-import { useHistory } from 'react-router-dom';
+import React, { useState } from 'react'
+import { axiosInstance } from './axios';
 import Categories from '../Posts/categories'
 import {
 	makeStyles, Container, Typography,
@@ -37,7 +36,6 @@ export default function PostCreate() {
 
 	const token = localStorage.getItem('access_token')
 	const categories = Categories()
-	const history = useHistory();
 	const initialFormData = Object.freeze({
 		category: null,
 		title: '',
@@ -48,7 +46,7 @@ export default function PostCreate() {
 
 
 	const [postData, updatePostData] = useState(initialFormData);
-	const [postImage, setPostImage] = useState(undefined);
+	const [postImage, setPostImage] = useState(null);
 	const [submit, setSubmit] = useState({
 		color: 'secondary',
 		text: 'Сохранить черновик'
@@ -63,7 +61,7 @@ export default function PostCreate() {
 				setSubmit({ text: 'Сохранить черновик', color: 'secondary' })
 			}
 		}
-		if ([e.target.name] == 'image') {
+		if ([e.target.name] == 'image' && e.target.image !== null) {
 			setPostImage({
 				image: e.target.files[0]
 			})
@@ -85,11 +83,12 @@ export default function PostCreate() {
 		formData.append('excerpt', postData.excerpt)
 		formData.append('content', postData.content)
 		formData.append('status', postData.status)
-		formData.append('image', postImage.image)
+		if (postImage !== null) {
+			formData.append('image', postImage.image)
+		}
 		axiosInstance.post(`posts/create/`, formData)
 			.then(() => {
-				history.push('/admin')
-				window.location.reload()
+				window.location.assign('/my-posts')
 			})
 			.catch((err) => {
 				alert(err)

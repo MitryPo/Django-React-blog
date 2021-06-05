@@ -28,7 +28,7 @@ const routing = (
           <Route path='/category/:slug' component={FilterPosts} />
           <Route path='/login/' component={Login} />
           <Route path='/logout/' component={LogOut} />
-          <Route path='/admin/' component={Admin} />
+          <Route path='/my-posts/' component={Admin} />
           <Route path='/profile/' component={Profile} />
           <Route path='/create/' component={PostCreate} />
           <Route path='/edit/:slug/' component={PostEdit} />

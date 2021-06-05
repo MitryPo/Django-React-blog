@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import {axiosInstance} from '../../axios';
+import {axiosInstance} from './axios';
 import PostLoadingComponent from '../Posts/postLoading'
 import Posts from './posts'
 import Header from '../header'

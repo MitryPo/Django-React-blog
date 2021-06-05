@@ -7,7 +7,7 @@ import UserChip from '../Admin/chip'
 
 import {
 	Divider, makeStyles, Container,
-	Paper, Grid, Link, Typography,
+	Paper, Grid, Typography,
 } from '@material-ui/core'
 import Image from 'material-ui-image';
 
@@ -26,7 +26,11 @@ const useStyles = makeStyles((theme) => ({
 		fontSize: '3rem'
 	},
 	image: {
-		margin: theme.spacing(4, 0)
+		margin: theme.spacing(4, 0),
+	},
+	img: {
+		maxWidth: '79.99999%',
+		objectFit: 'contain'
 	},
 	content: {
 		whiteSpace: 'pre-wrap',
@@ -105,11 +109,9 @@ export default function PostDetail() {
 					</Grid>
 				</Grid>
 				<Grid item xs={12} md={9} className={classes.image}>
-					<Image
+					<img
+						className={classes.img}
 						src={data.posts.image}
-						onClick={() => console.log('onClick')}
-						aspectRatio={(16 / 9)}
-						disableSpinner
 					/>
 				</Grid>
 				<Grid item xs={12} md={9}>
